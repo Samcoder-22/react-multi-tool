@@ -62,13 +62,27 @@
 
 // src/components/Calculator/Calculator.jsx
 import React, { useState, useEffect } from 'react';
-import mexp from 'math-expression-evaluator';
+// import mexp from 'math-expression-evaluator';
 import styles from './Calculator.module.css';
+import { isValidExpr } from '../../utils/validateExpression';
+import { Parser } from 'expr-eval';
+
+const parser = new Parser();
 
 const Calculator = () => {
   const [expression, setExpression] = useState('');
   const [result, setResult] = useState('');
-
+  const handleEvaluate = () => {
+  if (!isValidExpr(expression)) {
+    setResult('Error');
+    return;
+  }
+  try {
+    setResult(parser.evaluate(expression));
+  } catch {
+    setResult('Error');
+  }
+};
   const handleInput = (value) => {
     switch (value) {
       case 'AC':
@@ -97,18 +111,18 @@ const Calculator = () => {
     setResult('');
   };
 
-  const handleEvaluate = () => {
-    try {
-      setResult(mexp.eval(expression));
-    } catch {
-      setResult('Error');
-    }
-  };
+  // const handleEvaluate = () => {
+  //   try {
+  //     setResult(parser.evaluate(expression));
+  //   } catch {
+  //     setResult('Error');
+  //   }
+  // };
 
   const toggleSign = () => {
     try {
       if (expression !== '') {
-        const value = mexp.eval(expression);
+        const value = parser.evaluate(expression);
         setExpression((-value).toString());
       }
     } catch {
@@ -119,7 +133,7 @@ const Calculator = () => {
   const applyPercentage = () => {
     try {
       if (expression !== '') {
-        const value = mexp.eval(expression);
+        const value = parser.evaluate(expression);
         setExpression((value / 100).toString());
       }
     } catch {
@@ -136,7 +150,7 @@ const Calculator = () => {
     }
 
     try {
-      const evalResult = mexp.eval(expression);
+      const evalResult = parser.evaluate(expression);
       setResult(evalResult);
     } catch {
       setResult('');
