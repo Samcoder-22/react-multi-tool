@@ -62,6 +62,7 @@
 
 // src/components/Calculator/Calculator.jsx
 import React, { useState, useEffect } from 'react';
+import mexp from 'math-expression-evaluator';
 import styles from './Calculator.module.css';
 
 const Calculator = () => {
@@ -98,7 +99,7 @@ const Calculator = () => {
 
   const handleEvaluate = () => {
     try {
-      setResult(eval(expression));
+      setResult(mexp.eval(expression));
     } catch {
       setResult('Error');
     }
@@ -107,7 +108,7 @@ const Calculator = () => {
   const toggleSign = () => {
     try {
       if (expression !== '') {
-        const value = eval(expression);
+        const value = mexp.eval(expression);
         setExpression((-value).toString());
       }
     } catch {
@@ -118,7 +119,7 @@ const Calculator = () => {
   const applyPercentage = () => {
     try {
       if (expression !== '') {
-        const value = eval(expression);
+        const value = mexp.eval(expression);
         setExpression((value / 100).toString());
       }
     } catch {
@@ -135,7 +136,7 @@ const Calculator = () => {
     }
 
     try {
-      const evalResult = eval(expression);
+      const evalResult = mexp.eval(expression);
       setResult(evalResult);
     } catch {
       setResult('');
